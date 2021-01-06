@@ -1,0 +1,19 @@
+{
+	"name": "majtas/waluty-api",
+	"description": "Projekt walutowy",
+	"type": "project",
+	"authors": [
+		{
+			"name": "Piotr Majkutewicz",
+			"email": "piotrek.majkutewicz@gmail.com"
+		}
+	],
+	"autoload": {
+		"psr-4": {
+			"App\\": "src/"
+		}
+	},
+	"require": {
+		"guzzlehttp/guzzle": "^7.2"
+	}
+}
