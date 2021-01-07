@@ -6,6 +6,7 @@ use App\View;
 
 class AppController {
 	private View $view;
+	public $a = 'testowo appcontroller';
 
 	public function __construct() {
 		$this->view = new View();
@@ -18,7 +19,8 @@ class AppController {
 
 	public function test()
 	{
-		echo "Bążur";
+		echo "Hello world";
 	}
+
 
 }
