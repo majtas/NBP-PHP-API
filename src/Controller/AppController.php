@@ -6,21 +6,13 @@ use App\View;
 
 class AppController {
 	private View $view;
-	public $a = 'testowo appcontroller';
 
 	public function __construct() {
 		$this->view = new View();
 	}
 
-	public function run()
-	{
-		$this->view->view('template');
+	public function getPage($page) {
+		$file = "./templates/pages/$page.php";
+		file_exists($file) ? $this->view->view($file) : $this->view->view(404);
 	}
-
-	public function test()
-	{
-		echo "Hello world";
-	}
-
-
 }

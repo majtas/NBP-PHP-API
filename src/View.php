@@ -4,10 +4,18 @@ namespace App;
 
 class View {
 
-	private $filePath = "./templates/";
+	private $path = "./templates/";
+	private $template = "template.php";
 
-	public function view($page, $args = [], $ext = '.php') {
-		$file = $page.$ext;
-		include_once($this->filePath . $file);
+	private function getTemplate() {
+		return $this->path.$this->template;
+	}
+
+	private function get404Page() {
+		return include_once($this->path."404.php");
+	}
+
+	public function view($page) {
+		$page === 404 ? $this->get404Page() : include_once($this->getTemplate());
 	}
 }
