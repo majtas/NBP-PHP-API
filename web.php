@@ -1,6 +1,7 @@
 <?php
 
 use App\Controller\AppController;
+use App\Controller\ApiController;
 use App\Route\Route;
 
 $app = new AppController();
@@ -11,7 +12,10 @@ $router->get('/', function() use ($app) {
 });
 
 $router->get('/kurs', function() use ($app) {
-	$app->getPage('kursy');
+	$app->getPage('kursy', ['values' => $app->getCurrencyArray()]);
+});
+$router->post('/kurs', function() use ($app) {
+	$app->getPage('kursy', (new ApiController())->getCurrency());
 });
 
 $router->get('/diagram', function() use ($app) {

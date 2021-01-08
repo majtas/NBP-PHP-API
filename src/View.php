@@ -15,7 +15,7 @@ class View {
 		return include_once($this->path."404.php");
 	}
 
-	public function view($page) {
+	public function view($page, $params = []) {
 		$page === 404 ? $this->get404Page() : include_once($this->getTemplate());
 	}
 }

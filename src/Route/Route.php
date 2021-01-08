@@ -9,8 +9,17 @@ class Route {
 	private $routes = [];
 
 	public function get(string $uri, Closure $callback) {
-		$uri = trim($uri, '/');
-		$this->routes[$uri] = $callback;
+		if($_SERVER['REQUEST_METHOD'] === 'GET') {
+			$uri = trim($uri, '/');
+			return ($this->routes[$uri] = $callback);
+		}
+	}
+
+	public function post(string $uri, Closure $callback) {
+		if($_SERVER['REQUEST_METHOD'] === 'POST') {
+			$uri = trim($uri, '/');
+			$this->routes[$uri] = $callback;
+		}
 	}
 
 	public function dispatch()
