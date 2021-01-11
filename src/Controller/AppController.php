@@ -14,10 +14,17 @@ class AppController {
 
 	public function getPage($page, $params = []) {
 		$file = "./templates/pages/$page.php";
+		$params['values'] = Currency::getValues();
 		file_exists($file) ? $this->view->view($file, $params) : $this->view->view(404);
 	}
 
-	public function getCurrencyArray() {
-		return Currency::getValues();
+	public function getCurrency()
+	{
+		return (new ApiController())->getCurrency();
+	}
+
+	public function getHistoryCurrency()
+	{
+		return (new ApiController())->getHistoryCurrency();
 	}
 }

@@ -1,25 +1,29 @@
 <?php
 
 use App\Controller\AppController;
-use App\Controller\ApiController;
 use App\Route\Route;
 
 $app = new AppController();
 $router = new Route();
 
-$router->get('/', function() use ($app) {
+Route::get('/', function() use ($app) {
 	$app->getPage('home');
 });
 
-$router->get('/kurs', function() use ($app) {
-	$app->getPage('kursy', ['values' => $app->getCurrencyArray()]);
-});
-$router->post('/kurs', function() use ($app) {
-	$app->getPage('kursy', (new ApiController())->getCurrency());
+Route::get('/kurs', function() use ($app) {
+	$app->getPage('kursy');
 });
 
-$router->get('/diagram', function() use ($app) {
+Route::post('/kurs', function() use ($app) {
+	$app->getPage('kursy', $app->getCurrency());
+});
+
+Route::get('/diagram', function() use ($app) {
 	$app->getPage('diagram');
 });
 
-$router->dispatch();
+Route::post('/diagram', function() use ($app) {
+	$app->getPage('diagram', $app->getHistoryCurrency());
+});
+
+Route::dispatch();

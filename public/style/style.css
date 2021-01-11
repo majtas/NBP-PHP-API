@@ -32,3 +32,7 @@ body {
   background-color: #4CAF50;
   color: white;
 }
+
+#diagram {
+	min-width: 1024px !important;
+}

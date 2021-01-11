@@ -7,10 +7,9 @@ use Exception;
 use GuzzleHttp;
 
 class ApiController {
-
 	private $client;
 	private $format;
-	private $formRequest;
+	private $currencyRequest;
 	private $attributes = [];
 
 	public function __construct($format = 'json')
@@ -24,17 +23,39 @@ class ApiController {
 			]
 		);
 		$this->format = $format;
-		$this->attributes['values'] = Currency::getValues();
-		$this->setFormRequest();
+		$this->setCurrencyRequest();
 	}
 
 	public function getCurrency()
 	{
 		$this->attributes['request'] =
-			$this->getFormRequest() === 'gold' ?
+			$this->getCurrencyRequest() === 'gold' ?
 				$this->request('GET', "cenyzlota") :
-				$this->request('GET', "exchangerates/rates/C/{$this->getFormRequest()}/");
+				$this->request('GET', "exchangerates/rates/C/{$this->getCurrencyRequest()}/");
 		return $this->attributes;
+	}
+
+	public function getHistoryCurrency()
+	{
+		$startDate = date('Y-m-d');
+		$endDate = date('Y-m-d', strtotime("-2 months"));
+		$this->attributes['request'] = $this->request('GET', "exchangerates/rates/C/{$this->getCurrencyRequest()}/{$endDate}/{$startDate}");
+		$this->attributes['diagram'] = $this->getJsonDiagramConfig();
+		unset($this->attributes['request']);
+		return $this->attributes;
+	}
+
+	public function getJsonDiagramConfig()
+	{
+		foreach($this->attributes['request']->rates as $rate) {
+			$this->attributes['diagram'][] =
+				[
+					'date' => date('d F', strtotime($rate->effectiveDate)),
+					'ask' => $rate->ask,
+					'bid' => $rate->bid
+				];
+		}
+			return json_encode($this->attributes['diagram']);
 	}
 
 	private function request($method, $uri)
@@ -46,15 +67,15 @@ class ApiController {
 		}
 	}
 
-	private function setFormRequest()
+	private function setCurrencyRequest()
 	{
 		$request = $_REQUEST['searching'];
 		if(!in_array($request, Currency::getValues())) throw new Exception("Nie możemy odnaleźć szukanej waluty.");
-		else $this->formRequest = $request;
+		else $this->currencyRequest = $request;
 	}
 
-	private function getFormRequest() {
-		return $this->formRequest;
+	private function getCurrencyRequest() {
+		return $this->currencyRequest;
 	}
 
 	private function validate($method, $uri) {
