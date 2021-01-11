@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once("vendor/autoload.php");
 
 use App\Classes\Currency;
@@ -10,11 +12,11 @@ try {
 	require_once("web.php");
 }
 catch (ClientException $e) {
-	print_r("Currency ". $e->getResponse()->getReasonPhrase());
+	exit("Currency ". $e->getResponse()->getReasonPhrase());
 }
 catch (Exception $e) {
-	print_r($e->getMessage());
+	exit($e->getMessage());
 }
 catch (Throwable $e) {
-	print_r("Wystąpił błąd. Kod błędu: {$e->getCode()}");
+	exit("Wystąpił nieoczekiwany błąd. Skontaktuj się z administratorem. Kod błędu: {$e->getCode()}");
 }

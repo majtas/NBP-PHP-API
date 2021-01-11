@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Classes\Currency;
@@ -18,12 +20,12 @@ class AppController {
 		file_exists($file) ? $this->view->view($file, $params) : $this->view->view(404);
 	}
 
-	public function getCurrency()
+	public function getCurrency(): array
 	{
 		return (new ApiController())->getCurrency();
 	}
 
-	public function getHistoryCurrency()
+	public function getHistoryCurrency(): array
 	{
 		return (new ApiController())->getHistoryCurrency();
 	}

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App;
 
 class View {
@@ -7,7 +9,7 @@ class View {
 	private $path = "./templates/";
 	private $template = "template.php";
 
-	private function getTemplate() {
+	private function getTemplate(): string {
 		return $this->path.$this->template;
 	}
 

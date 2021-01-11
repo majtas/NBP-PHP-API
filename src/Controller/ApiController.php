@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Classes\Currency;
@@ -12,7 +14,7 @@ class ApiController {
 	private $currencyRequest;
 	private $attributes = [];
 
-	public function __construct($format = 'json')
+	public function __construct(string $format = 'json')
 	{
 		$this->client = new GuzzleHttp\Client(
 			['base_uri' => 'http://api.nbp.pl/api/'],
@@ -26,7 +28,7 @@ class ApiController {
 		$this->setCurrencyRequest();
 	}
 
-	public function getCurrency()
+	public function getCurrency(): array
 	{
 		$this->attributes['request'] =
 			$this->getCurrencyRequest() === 'gold' ?
@@ -35,7 +37,7 @@ class ApiController {
 		return $this->attributes;
 	}
 
-	public function getHistoryCurrency()
+	public function getHistoryCurrency(): array
 	{
 		$startDate = date('Y-m-d');
 		$endDate = date('Y-m-d', strtotime("-2 months"));
@@ -45,7 +47,7 @@ class ApiController {
 		return $this->attributes;
 	}
 
-	public function getJsonDiagramConfig()
+	public function getJsonDiagramConfig(): string
 	{
 		foreach($this->attributes['request']->rates as $rate) {
 			$this->attributes['diagram'][] =
@@ -58,12 +60,12 @@ class ApiController {
 			return json_encode($this->attributes['diagram']);
 	}
 
-	private function request($method, $uri)
+	private function request(string $method, string $uri): object
 	{
 		$this->validate($method, $uri);
 		$result = $this->client->request($method, $uri);
 		if($result->getStatusCode() == 200) {
-			return json_decode($result->getBody());
+			return json_decode($result->getBody()->getContents());
 		}
 	}
 
@@ -74,11 +76,11 @@ class ApiController {
 		else $this->currencyRequest = $request;
 	}
 
-	private function getCurrencyRequest() {
+	private function getCurrencyRequest(): string {
 		return $this->currencyRequest;
 	}
 
-	private function validate($method, $uri) {
+	private function validate(string $method, string $uri) {
 		if(empty($method) || empty($uri)) exit("Błąd pobierania danych. Puste parametry.");
 	}
 }
