@@ -60,7 +60,7 @@ class ApiController {
 			return json_encode($this->attributes['diagram']);
 	}
 
-	private function request(string $method, string $uri): object
+	private function request(string $method, string $uri): mixed
 	{
 		$this->validate($method, $uri);
 		$result = $this->client->request($method, $uri);
